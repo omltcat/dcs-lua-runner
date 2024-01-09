@@ -1,0 +1,101 @@
+{
+  "name": "dcs-lua-runner",
+  "displayName": "DCS Lua Runner",
+  "description": "Run lua code in DCS World Mission Scripting Environment (local or remote server). A reimplementation of the DCS Fiddle lua console in VS Code.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "DCS Lua Runner",
+      "properties": {
+        "dcsLuaRunner.serverAddress": {
+          "type": "string",
+          "default": "127.0.0.1",
+          "description": "DCS server address."
+        },
+        "dcsLuaRunner.serverPort": {
+          "type": "number",
+          "default": 12080,
+          "description": "DCS Fiddle port."
+        },
+        "dcsLuaRunner.useHttps": {
+          "type": "boolean",
+          "default": false,
+          "description": "If server is behind a HTTPS reverse proxy. You should also change the port to 443."
+        },
+        "dcsLuaRunner.webAuthUsername": {
+          "type": "string",
+          "default": "username",
+          "description": "The username for authentication."
+        },
+        "dcsLuaRunner.webAuthPassword": {
+          "type": "string",
+          "default": "password",
+          "description": "The password for authentication."
+        }
+      }
+    },
+    "menus": {
+      "editor/title/run": [
+        {
+          "command": "dcs-lua-runner.run-file-mission",
+          "group": "navigation@0",
+          "when": "editorLangId == lua"
+        },
+        {
+          "command": "dcs-lua-runner.run-file-hooks",
+          "group": "navigation@1",
+          "when": "editorLangId == lua"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "dcs-lua-runner.get-theatre",
+        "group": "navigation@0",
+        "title": "DCS Lua: Get Mission Theatre"
+      },
+      {
+        "command": "dcs-lua-runner.run-file-mission",
+        "group": "navigation@1",
+        "title": "DCS Lua: Run Current File in Mission Environment",
+        "icon": "$(run)"
+      },
+      {
+        "command": "dcs-lua-runner.run-file-hooks",
+        "group": "navigation@2",
+        "title": "DCS Lua: Run Current File in Hooks Environment",
+        "icon": "$(debug-coverage)"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vscode/test-cli": "^0.0.4",
+    "@vscode/test-electron": "^2.3.8",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "axios": "^1.6.5"
+  }
+}
