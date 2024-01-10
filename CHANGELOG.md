@@ -25,3 +25,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 - Consolidate run code commands to different targets into one, execute based on current setting. 
 - Improve output to show current runner target.
+
+## [1.0.1] - 2024-01-10
+
+### Changed
+- Update modified dcs-fiddle-server.lua to 0.2.0.
+
+### Fixed
+- Fix link to original DCS Fiddle install instructions.
