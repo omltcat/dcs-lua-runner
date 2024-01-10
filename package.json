@@ -1,13 +1,18 @@
 {
   "name": "dcs-lua-runner",
   "displayName": "DCS Lua Runner",
-  "description": "Run lua code in DCS World Mission Scripting Environment (local or remote server). A reimplementation of the DCS Fiddle lua console in VS Code.",
-  "version": "0.0.1",
+  "description": "Quickly run lua code in DCS World (local or remote server). A reimplementation of the DCS Fiddle lua console in VS Code.",
+  "version": "1.0.0",
+  "icon": "docs/img/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/omltcat/dcs-lua-runner"},
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
-    "Other"
+    "Programming Languages",
+    "Debuggers"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
@@ -17,13 +22,13 @@
       "properties": {
         "dcsLuaRunner.serverAddress": {
           "type": "string",
-          "default": "127.0.0.1",
-          "description": "DCS server address."
+          "default": "",
+          "description": "Remote DCS server address (IP or domain)."
         },
         "dcsLuaRunner.serverPort": {
           "type": "number",
           "default": 12080,
-          "description": "DCS Fiddle port."
+          "description": "Remote DCS Fiddle port."
         },
         "dcsLuaRunner.useHttps": {
           "type": "boolean",
@@ -33,46 +38,138 @@
         "dcsLuaRunner.webAuthUsername": {
           "type": "string",
           "default": "username",
-          "description": "The username for authentication."
+          "description": "The username for authentication. Requires the modified DCS Fiddle script."
         },
         "dcsLuaRunner.webAuthPassword": {
           "type": "string",
           "default": "password",
-          "description": "The password for authentication."
+          "description": "The password for authentication. Requires the modified DCS Fiddle script."
+        },
+        "dcsLuaRunner.runCodeLocally": {
+          "type": "boolean",
+          "default": true,
+          "description": "Send code to 127.0.0.1:12080 or remote server set below."
+        },
+        "dcsLuaRunner.runInMissionEnv": {
+          "type": "boolean",
+          "default": true,
+          "description": "Execute in mission or GUI Scripting Environment."
         }
       }
     },
     "menus": {
-      "editor/title/run": [
+      "editor/title": [
         {
-          "command": "dcs-lua-runner.run-file-mission",
-          "group": "navigation@0",
+          "command": "dcs-lua-runner.run-file",
+          "group": "navigation@3",
           "when": "editorLangId == lua"
         },
         {
-          "command": "dcs-lua-runner.run-file-hooks",
-          "group": "navigation@1",
-          "when": "editorLangId == lua"
+            "command": "dcs-lua-runner.set-local-button",
+            "when": "editorLangId == lua && config.dcsLuaRunner.runCodeLocally == false",
+            "group": "navigation@0"            
+        },
+        {
+            "command": "dcs-lua-runner.set-remote-button",
+            "when": "editorLangId == lua && config.dcsLuaRunner.runCodeLocally == true",
+            "group": "navigation@0"            
+        },
+        {
+            "command": "dcs-lua-runner.set-missionEnv-button",
+            "when": "editorLangId == lua && config.dcsLuaRunner.runInMissionEnv == false",
+            "group": "navigation@1"            
+        },
+        {
+            "command": "dcs-lua-runner.set-guiEnv-button",
+            "when": "editorLangId == lua && config.dcsLuaRunner.runInMissionEnv == true",
+            "group": "navigation@1"            
         }
-      ]
+    ],
+      "editor/context": [
+        {
+          "command": "dcs-lua-runner.run-selected",
+          "group": "navigation",
+          "when": "editorLangId == lua && editorHasSelection"
+        }
+      ],
+      "commandPalette": [
+        {
+            "command": "dcs-lua-runner.run-file",
+            "when": "editorLangId == lua"
+        },
+        {
+            "command": "dcs-lua-runner.run-selected",
+            "when": "editorLangId == lua && editorHasSelection"
+        },
+        {
+            "command": "dcs-lua-runner.set-local-button",
+            "when": "false"
+        },
+        {
+            "command": "dcs-lua-runner.set-remote-button",
+            "when": "false"
+        },
+        {
+            "command": "dcs-lua-runner.set-missionEnv-button",
+            "when": "false"
+        },
+        {
+            "command": "dcs-lua-runner.set-guiEnv-button",
+            "when": "false"
+        }
+    ]
     },
     "commands": [
+      {
+        "command": "dcs-lua-runner.open-settings",
+        "title": "DCS Lua: Open Runner Settings"
+      },
       {
         "command": "dcs-lua-runner.get-theatre",
         "group": "navigation@0",
         "title": "DCS Lua: Get Mission Theatre"
       },
       {
-        "command": "dcs-lua-runner.run-file-mission",
+        "command": "dcs-lua-runner.run-file",
         "group": "navigation@1",
-        "title": "DCS Lua: Run Current File in Mission Environment",
+        "title": "DCS Lua: Run Current File",
         "icon": "$(run)"
       },
       {
-        "command": "dcs-lua-runner.run-file-hooks",
-        "group": "navigation@2",
-        "title": "DCS Lua: Run Current File in Hooks Environment",
-        "icon": "$(debug-coverage)"
+        "command": "dcs-lua-runner.run-selected",
+        "title": "DCS Lua: Run Selected Code"
+      },
+      {
+        "command": "dcs-lua-runner.set-local",
+        "title": "DCS Lua: Set Run Code on Local Machine"
+      },
+      {
+        "command": "dcs-lua-runner.set-local-button",
+        "title": "DCS: Remote"
+      },
+      {
+        "command": "dcs-lua-runner.set-remote",
+        "title": "DCS Lua: Set Run Code on Remote Server"
+      },
+      {
+        "command": "dcs-lua-runner.set-remote-button",
+        "title": "DCS: Local"
+      },
+      {
+        "command": "dcs-lua-runner.set-missionEnv",
+        "title": "DCS Lua: Set Run Code in Mission Environment"
+      },
+      {
+        "command": "dcs-lua-runner.set-missionEnv-button",
+        "title": "Env: GUI"
+      },
+      {
+        "command": "dcs-lua-runner.set-guiEnv",
+        "title": "DCS Lua: Set Run Code in GUI Environment"
+      },
+      {
+        "command": "dcs-lua-runner.set-guiEnv-button",
+        "title": "Env: Mission"
       }
     ]
   },

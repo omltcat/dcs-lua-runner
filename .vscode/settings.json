@@ -10,5 +10,8 @@
     "typescript.tsc.autoDetect": "off",
     "cSpell.words": [
         "reimplementation"
+    ],
+    "Lua.diagnostics.globals": [
+        "net"
     ]
 }
