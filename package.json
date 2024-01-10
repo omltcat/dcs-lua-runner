@@ -2,6 +2,7 @@
   "name": "dcs-lua-runner",
   "displayName": "DCS Lua Runner",
   "description": "Quickly run lua code in DCS World (local or remote server). A reimplementation of the DCS Fiddle lua console in VS Code.",
+  "license": "MIT",
   "version": "1.0.0",
   "icon": "docs/img/icon.png",
   "repository": {
