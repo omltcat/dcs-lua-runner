@@ -1,3 +1,6 @@
+-- Note: This is a modified version of the DCS Fiddle Server to add authentication for public servers.
+-- All credit goes to the original authors of DCS Fiddle: JonathanTurnock and john681611
+
 FIDDLE = {}
 
 -- Configs:

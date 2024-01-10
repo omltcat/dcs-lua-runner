@@ -22,7 +22,7 @@ Allows for quick development and debugging of running scripted missions directly
 
 ### DCS Hooks Installation
 Install DCS Fiddle script the same way as the original web version, and de-sanitize mission scripting.   
-[**Original instruction here**](https://dcsfiddle.pages.dev/docs.)
+[**Original instruction here**](https://dcsfiddle.pages.dev/docs)
 
 All credits of this scripts and its API implementations go to the original authors [JonathanTurnock](https://github.com/JonathanTurnock) and [john681611](https://github.com/john681611).
 
