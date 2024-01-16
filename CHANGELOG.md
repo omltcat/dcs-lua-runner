@@ -33,3 +33,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 - Fix link to original DCS Fiddle install instructions.
+
+## [1.0.2]
+
+### Fixed
+- Fix buttons getting separated by other extensions.

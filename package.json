@@ -4,7 +4,7 @@
   "description": "Quickly run lua code in DCS World (local or remote server). A reimplementation of the DCS Fiddle lua console in VS Code.",
   "license": "MIT",
   "publisher": "omltcat",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "icon": "docs/img/icon.png",
   "repository": {
     "type": "git",
@@ -63,28 +63,28 @@
       "editor/title": [
         {
           "command": "dcs-lua-runner.run-file",
-          "group": "navigation@3",
+          "group": "navigation@-3",
           "when": "editorLangId == lua"
         },
         {
             "command": "dcs-lua-runner.set-local-button",
             "when": "editorLangId == lua && config.dcsLuaRunner.runCodeLocally == false",
-            "group": "navigation@0"            
+            "group": "navigation@-5"            
         },
         {
             "command": "dcs-lua-runner.set-remote-button",
             "when": "editorLangId == lua && config.dcsLuaRunner.runCodeLocally == true",
-            "group": "navigation@0"            
+            "group": "navigation@-5"            
         },
         {
             "command": "dcs-lua-runner.set-missionEnv-button",
             "when": "editorLangId == lua && config.dcsLuaRunner.runInMissionEnv == false",
-            "group": "navigation@1"            
+            "group": "navigation@-4"            
         },
         {
             "command": "dcs-lua-runner.set-guiEnv-button",
             "when": "editorLangId == lua && config.dcsLuaRunner.runInMissionEnv == true",
-            "group": "navigation@1"            
+            "group": "navigation@-4"            
         }
     ],
       "editor/context": [
