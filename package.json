@@ -4,7 +4,7 @@
   "description": "Quickly run lua code in DCS World (local or remote server). A reimplementation of the DCS Fiddle lua console in VS Code.",
   "license": "MIT",
   "publisher": "omltcat",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "icon": "docs/img/icon.png",
   "repository": {
     "type": "git",
@@ -16,7 +16,9 @@
     "Programming Languages",
     "Debuggers"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:lua"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
@@ -56,6 +58,17 @@
           "type": "boolean",
           "default": true,
           "description": "Execute in mission or GUI Scripting Environment."
+        },
+        "dcsLuaRunner.returnDisplay": {
+          "type": "string",
+          "enum": ["Console Output", "Json File"],
+          "default": "Console Output",
+          "description": "How data returned from DCS is displayed."
+        },
+        "dcsLuaRunner.showQuickButtons": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show buttons to quickly switch settings beside the run button."
         }
       }
     },
@@ -68,22 +81,22 @@
         },
         {
             "command": "dcs-lua-runner.set-local-button",
-            "when": "editorLangId == lua && config.dcsLuaRunner.runCodeLocally == false",
+            "when": "editorLangId == lua && config.dcsLuaRunner.runCodeLocally == false && config.dcsLuaRunner.showQuickButtons == true",
             "group": "navigation@-5"            
         },
         {
             "command": "dcs-lua-runner.set-remote-button",
-            "when": "editorLangId == lua && config.dcsLuaRunner.runCodeLocally == true",
+            "when": "editorLangId == lua && config.dcsLuaRunner.runCodeLocally == true && config.dcsLuaRunner.showQuickButtons == true",
             "group": "navigation@-5"            
         },
         {
             "command": "dcs-lua-runner.set-missionEnv-button",
-            "when": "editorLangId == lua && config.dcsLuaRunner.runInMissionEnv == false",
+            "when": "editorLangId == lua && config.dcsLuaRunner.runInMissionEnv == false && config.dcsLuaRunner.showQuickButtons == true",
             "group": "navigation@-4"            
         },
         {
             "command": "dcs-lua-runner.set-guiEnv-button",
-            "when": "editorLangId == lua && config.dcsLuaRunner.runInMissionEnv == true",
+            "when": "editorLangId == lua && config.dcsLuaRunner.runInMissionEnv == true && config.dcsLuaRunner.showQuickButtons == true",
             "group": "navigation@-4"            
         }
     ],

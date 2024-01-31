@@ -2,10 +2,12 @@ import * as vscode from 'vscode';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
+import { config } from 'process';
 
 async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename: string = 'none') {
 	const lua_base64 = Buffer.from(lua).toString('base64');
 	const config = vscode.workspace.getConfiguration('dcsLuaRunner');
+	const returnDisplay = config.get('returnDisplay') as string;
 	const runCodeLocally = config.get('runCodeLocally') as boolean;
 	const runInMissionEnv = config.get('runInMissionEnv') as boolean;
 	const serverAddress = runCodeLocally ? '127.0.0.1' : config.get('serverAddress') as string;
@@ -15,6 +17,34 @@ async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename
 	const authPassword = config.get('webAuthPassword') as string;
 	const protocol = useHttps ? 'https' : 'http';
 	const envName = runInMissionEnv ? 'Mission' : 'GUI';
+
+	const displayOutput = async (output: Object) => {
+		if (returnDisplay === 'Console Output') {
+			outputChannel.show(true);
+			outputChannel.appendLine(`[DCS] ${new Date().toLocaleString()} (${envName}@${serverAddress}:${serverPort} <- ${filename}):\n${JSON.stringify(output, null, 2)}`);
+		} else if (returnDisplay === 'Json File') {
+			const activeEditor = vscode.window.activeTextEditor;
+			const workspaceFolder = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
+			const filePath = `${workspaceFolder}/.vscode/dcs_lua_output.json`;
+			// Create the file if it doesn't exist
+			if (!fs.existsSync(filePath)) {
+				fs.writeFileSync(filePath, '');
+			}
+		
+			const document = await vscode.workspace.openTextDocument(vscode.Uri.file(filePath));
+			const viewColumn = vscode.window.activeTextEditor && vscode.window.activeTextEditor.viewColumn === vscode.ViewColumn.Two ? vscode.ViewColumn.Two : vscode.ViewColumn.Beside;
+			const editor = await vscode.window.showTextDocument(document, viewColumn);
+			await editor.edit(editBuilder => {
+				editBuilder.replace(new vscode.Range(document.lineAt(0).range.start, document.lineAt(document.lineCount - 1).range.end), JSON.stringify(output, null, 2));
+			});
+			await document.save();
+			
+			if (activeEditor) {
+				vscode.window.showTextDocument(activeEditor.document, activeEditor.viewColumn);
+			}
+		}
+	}
+
 	try {
 		const response = await axios.get(`${protocol}://${serverAddress}:${serverPort}/${lua_base64}?env=default`, {
 			auth: {
@@ -26,14 +56,14 @@ async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename
 
 		outputChannel.show(true);
 		if (response.data.hasOwnProperty('result')) {
-			outputChannel.appendLine(`[DCS] ${new Date().toLocaleString()} (${envName}@${serverAddress}:${serverPort} <- ${filename}):\n${JSON.stringify(response.data.result, null, 2)}`);
+			displayOutput(response.data.result);
 		} else {
-			outputChannel.appendLine(`[DCS] ${new Date().toLocaleString()} (${envName}@${serverAddress}:${serverPort} <- ${filename}):\n<NO RETURN VALUE>`);
+			displayOutput({"SUCCESSFUL EXECUTION": "NO RETURN VALUE"});
 		}
 	} catch (error: any) {
 		if (error.response && error.response.status === 500) {
 			vscode.window.showErrorMessage('Internal server error occurred.');
-			outputChannel.appendLine(`[DCS] ${new Date().toLocaleString()} (${envName}@${serverAddress}:${serverPort} <- ${filename}):\n${JSON.stringify(error.response.data.error, null, 2)}`);
+			displayOutput(error.response.data.error);
 		} else {
 			vscode.window.showErrorMessage(`Error: ${error}`);
 		}
@@ -58,6 +88,7 @@ function getCurrentFileLua() {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+	const config = vscode.workspace.getConfiguration('dcsLuaRunner');
     let outputChannel = vscode.window.createOutputChannel("DCS Lua Runner");
 
 	context.subscriptions.push(vscode.commands.registerCommand('dcs-lua-runner.open-settings', () => {
@@ -99,8 +130,12 @@ export function activate(context: vscode.ExtensionContext) {
 		const runEnv = runInMissionEnv ? 'mission' : 'GUI';
 		const serverAddress = runCodeLocally ? '127.0.0.1' : config.get('serverAddress') as string;
 		const serverPort = runCodeLocally ? 12080 : config.get('serverPort') as number + (runInMissionEnv ? 0 : 1);
-		outputChannel.show(true);
-		outputChannel.appendLine(`[DCS] Settings: Run code in ${runEnv} environment on ${runTarget} (${serverAddress}:${serverPort}).`);
+		if (config.get('returnDisplay') === 'Console Output') {
+			outputChannel.show(true);
+			outputChannel.appendLine(`[DCS] Settings: Run code in ${runEnv} environment on ${runTarget} (${serverAddress}:${serverPort}).`);
+		} else {
+			vscode.window.showInformationMessage(`Run code in ${runEnv} environment on ${serverAddress}:${serverPort}`);
+		}
 	};
 
 	const updateSetting = async (setting: string, targetState: boolean) => {
@@ -140,6 +175,53 @@ export function activate(context: vscode.ExtensionContext) {
 	if (vscode.window.activeTextEditor) {
 		vscode.commands.executeCommand('setContext', 'luaFileActive', vscode.window.activeTextEditor.document.languageId === 'lua');
 	}
+    let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+	statusBarItem.tooltip = 'DCS Lua Runner: Click to change settings';
+	statusBarItem.show();
+	statusBarItem.command = 'extension.showQuickPick';
+	context.subscriptions.push(statusBarItem);
+	
+	function updateStatusBarItem() {
+		const config = vscode.workspace.getConfiguration('dcsLuaRunner');
+		const editor = vscode.window.activeTextEditor;
+		const isLuaFile = editor && editor.document.languageId === 'lua';
+		const runCodeLocally = config.get('runCodeLocally') ? 'Local' : 'Remote';
+		const runInMissionEnv = config.get('runInMissionEnv') ? 'Mission' : 'GUI';
+	  
+		if (isLuaFile) {
+		  	statusBarItem.text = `DCS: ${runCodeLocally}, Env: ${runInMissionEnv}`;
+		  	statusBarItem.show();
+		} else {
+			statusBarItem.hide();
+		}
+	}
+
+	vscode.commands.registerCommand('extension.showQuickPick', () => {
+		const items = [
+			{ label: 'DCS Lua: Set Run Code on Local Machine', command: 'dcs-lua-runner.set-local' },
+			{ label: 'DCS Lua: Set Run Code on Remote Server', command: 'dcs-lua-runner.set-remote' },
+			{ label: 'DCS Lua: Set Run Code in Mission Environment', command: 'dcs-lua-runner.set-missionEnv' },
+			{ label: 'DCS Lua: Set Run Code in GUI Environment', command: 'dcs-lua-runner.set-guiEnv' },
+			{ label: 'DCS Lua: Open Settings', command: 'dcs-lua-runner.open-settings' }
+		];
+		vscode.window.showQuickPick(items).then(selection => {
+			// the user picked an item from the list
+			if (!selection) {
+				return;
+			}
+		
+			// execute the selected command
+			vscode.commands.executeCommand(selection.command);
+		});
+	});
+	
+    // Update the status bar when the configuration changes or the active text editor changes
+    context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(updateStatusBarItem));
+    context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateStatusBarItem));
+    context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(updateStatusBarItem));
+    context.subscriptions.push(vscode.workspace.onDidCloseTextDocument(updateStatusBarItem));
+	
+	updateStatusBarItem();
 }
 
 export function deactivate() {}

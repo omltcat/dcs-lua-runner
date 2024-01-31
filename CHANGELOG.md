@@ -38,3 +38,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 - Fix buttons getting separated by other extensions.
+
+## [1.1.0]
+
+### Added
+- Option to display return in a json side window, taking advantage of syntax highlighting.
+- Status bar item to quickly switch between local and remote DCS server, mission and GUI environment, and open settings .
+
+### Changed
+- Quick switch buttons next to the run code button is now hidden by default, superseded by the status bar item. These buttons take up too much space, especially when displaying return in json side window mode.
