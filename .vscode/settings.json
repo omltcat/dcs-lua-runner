@@ -12,6 +12,7 @@
         "reimplementation"
     ],
     "Lua.diagnostics.globals": [
-        "net"
+        "net",
+        "log"
     ]
 }

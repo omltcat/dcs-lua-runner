@@ -1,10 +1,10 @@
 # DCS Lua Runner
 
-A VS Code extension to run lua code in DCS World (local or remote server). A reimplementation of the  [DCS Fiddle](https://github.com/JonathanTurnock/dcsfiddle) web lua console.
+A VS Code extension to run lua code in DCS World (on local or remote server, in mission or GUI environment). A reimplementation of the  [DCS Fiddle](https://github.com/JonathanTurnock/dcsfiddle) web lua console.
 
 Allows for quick development and debugging of running scripted missions directly from the comfort of VS Code.  
 
-![Demo1](docs/img/demo1.png)
+![Demo1](docs/img/demo1-new.png)
 
 ![Demo2-1](docs/img/demo2-1.png)  
 ![Demo2-2](docs/img/demo2-2.png)
@@ -35,7 +35,7 @@ For even better security, put the Fiddle port behind a reverse proxy with HTTPS.
 
 ## Extension Settings
 
-This extension contributes the following settings:
+This extension has the following settings:
 
 - `dcsLuaRunner.serverAddress`: Remote DCS server address. It can be an IP address or a domain.
 
@@ -57,9 +57,10 @@ This setting can be quickly changed with the buttons on the upper-right of a lua
 - `dcsLuaRunner.runInMissionEnv`: Specifies whether to execute in mission or GUI Scripting Environment.  
 This setting can be quickly changed with the buttons on the upper-right of a lua file.
 
-## Known Issues
+**NEW:**
+- `dcsLuaRunner.returnDisplay`: Wether to use output panel or file (which supports syntax highlight) to display return value.
 
-The return value is displayed on in the output window, which unfortunately does not support syntax highlight. Possibilities to display return in other ways are being looked into.
+- `dcsLuaRunner.returnDisplayFormat`: Display return value as JSON or Lua table. (Experimental feature, please report any issue.)
 
 ## Release Notes
 

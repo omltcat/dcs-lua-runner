@@ -2,12 +2,12 @@ import * as vscode from 'vscode';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
-import { config } from 'process';
 
 async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename: string = 'none') {
 	const lua_base64 = Buffer.from(lua).toString('base64');
 	const config = vscode.workspace.getConfiguration('dcsLuaRunner');
-	const returnDisplay = config.get('returnDisplay') as string;
+	const returnDisplay = config.get('returnDisplay') === 'Output Panel (Scrolling Plain Text)' ? 'output' : 'file' as string;
+	const returnDisplayFormat = config.get('returnDisplayFormat') === 'JSON' ? 'json' : 'lua' as string;
 	const runCodeLocally = config.get('runCodeLocally') as boolean;
 	const runInMissionEnv = config.get('runInMissionEnv') as boolean;
 	const serverAddress = runCodeLocally ? '127.0.0.1' : config.get('serverAddress') as string;
@@ -18,14 +18,16 @@ async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename
 	const protocol = useHttps ? 'https' : 'http';
 	const envName = runInMissionEnv ? 'Mission' : 'GUI';
 
+	const logInfo = `${envName}@${serverAddress}:${serverPort} <- ${filename}`
+
 	const displayOutput = async (output: Object) => {
-		if (returnDisplay === 'Console Output') {
+		if (returnDisplay === 'output') {
 			outputChannel.show(true);
-			outputChannel.appendLine(`[DCS] ${new Date().toLocaleString()} (${envName}@${serverAddress}:${serverPort} <- ${filename}):\n${JSON.stringify(output, null, 2)}`);
-		} else if (returnDisplay === 'Json File') {
+			outputChannel.appendLine(`[DCS] ${new Date().toLocaleString()} (${logInfo}):\n${format(JSON.stringify(output, null, 4))}`);
+		} else if (returnDisplay === 'file') {
 			const activeEditor = vscode.window.activeTextEditor;
 			const workspaceFolder = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
-			const filePath = `${workspaceFolder}/.vscode/dcs_lua_output.json`;
+			const filePath = `${workspaceFolder}/.vscode/dcs_lua_output.${returnDisplayFormat}`;
 			// Create the file if it doesn't exist
 			if (!fs.existsSync(filePath)) {
 				fs.writeFileSync(filePath, '');
@@ -35,7 +37,7 @@ async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename
 			const viewColumn = vscode.window.activeTextEditor && vscode.window.activeTextEditor.viewColumn === vscode.ViewColumn.Two ? vscode.ViewColumn.Two : vscode.ViewColumn.Beside;
 			const editor = await vscode.window.showTextDocument(document, viewColumn);
 			await editor.edit(editBuilder => {
-				editBuilder.replace(new vscode.Range(document.lineAt(0).range.start, document.lineAt(document.lineCount - 1).range.end), JSON.stringify(output, null, 2));
+				editBuilder.replace(new vscode.Range(document.lineAt(0).range.start, document.lineAt(document.lineCount - 1).range.end), format(JSON.stringify(output, null, 4)));
 			});
 			await document.save();
 			
@@ -43,6 +45,26 @@ async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename
 				vscode.window.showTextDocument(activeEditor.document, activeEditor.viewColumn);
 			}
 		}
+	}
+	const format = (jsonString: string): string => {
+		if (returnDisplayFormat === 'json') {
+			return jsonString;
+		}
+		
+		let luaString = jsonString;	
+		// Replace JSON syntax with Lua syntax
+		luaString = luaString.replace(/"([^"]+)":/g, '["$1"] ='); // Replace "key": with ["key"] =
+		luaString = luaString.replace(/"_([0-9]+)":/g, '[$1] ='); // Replace "_n": with [n] =
+		luaString = luaString.replace(/null/g, 'nil'); // Replace null with nil
+		luaString = luaString.replace(/\[\n/g, '{\n'); // Replace [ followed by a line break with { followed by a line break
+		luaString = luaString.replace(/]\n/g, '}\n'); // Replace ] followed by a line break with } followed by a line break
+		luaString = luaString.replace(/],/g, '},'); // Replace ], with }, 
+		luaString = luaString.replace(/]\s*$/g, '}'); // Replace ] at the end of the string with }
+	
+		if (returnDisplay === 'file') {
+			luaString = `return --${logInfo}\n` + luaString;
+		}
+		return luaString;
 	}
 
 	try {
@@ -58,7 +80,7 @@ async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename
 		if (response.data.hasOwnProperty('result')) {
 			displayOutput(response.data.result);
 		} else {
-			displayOutput({"SUCCESSFUL EXECUTION": "NO RETURN VALUE"});
+			displayOutput("SUCCESSFUL EXECUTION - NO RETURN VALUE");
 		}
 	} catch (error: any) {
 		if (error.response && error.response.status === 500) {

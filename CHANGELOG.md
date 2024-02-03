@@ -34,16 +34,25 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Fixed
 - Fix link to original DCS Fiddle install instructions.
 
-## [1.0.2]
+## [1.0.2] - 2024-01-16
 
 ### Fixed
 - Fix buttons getting separated by other extensions.
 
-## [1.1.0]
+## [1.1.0] - 2024-01-31
 
 ### Added
-- Option to display return in a json side window, taking advantage of syntax highlighting.
+- Option to display return in a json side window (file), taking advantage of syntax highlighting.
 - Status bar item to quickly switch between local and remote DCS server, mission and GUI environment, and open settings .
 
 ### Changed
 - Quick switch buttons next to the run code button is now hidden by default, superseded by the status bar item. These buttons take up too much space, especially when displaying return in json side window mode.
+
+## [1.1.1] - 2024-02-02
+
+### Added
+- Option to display return in Lua table format, both in side window (file) and output panel.   
+(Experimental feature, please report any issue.)
+
+### Changed
+- Change default return display to file to take advantage of syntax highlight.

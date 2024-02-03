@@ -4,7 +4,7 @@
   "description": "Quickly run lua code in DCS World (local or remote server). A reimplementation of the DCS Fiddle lua console in VS Code.",
   "license": "MIT",
   "publisher": "omltcat",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "icon": "docs/img/icon.png",
   "repository": {
     "type": "git",
@@ -61,9 +61,15 @@
         },
         "dcsLuaRunner.returnDisplay": {
           "type": "string",
-          "enum": ["Console Output", "Json File"],
-          "default": "Console Output",
+          "enum": ["Output Panel (Scrolling Plain Text)", "Show File (Syntax Highlight)"],
+          "default": "Show File (Syntax Highlight)",
           "description": "How data returned from DCS is displayed."
+        },
+        "dcsLuaRunner.returnDisplayFormat": {
+          "type": "string",
+          "enum": ["Lua Table", "JSON"],
+          "default": "JSON",
+          "description": "Note: Experimental feature! Original returned data is in JSON. Conversion to Lua table is done after receiving data and may not be 100% accurate. Please report any issues."
         },
         "dcsLuaRunner.showQuickButtons": {
           "type": "boolean",
