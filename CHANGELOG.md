@@ -61,3 +61,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 - Fix output panel still opening when return display is set to file.
+
+## [1.1.3] - 2024-02-04
+
+### Fixed
+- Fix JSON to Lua table regex.
