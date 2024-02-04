@@ -10,13 +10,11 @@ Allows for quick development and debugging of running scripted missions directly
 ![Demo2-2](docs/img/demo2-2.png)
 
 ## Features
-
-- Send Lua code to run on local DCS or remote DCS server.
-- Run in mission or GUI scripting environment.
-- Right click and run only selected part of code. 
-- Display return value from DCS.
-- Fully compatible with existing DCS Fiddle hooks script.
-- Optional basic web auth for better public server security (see requirements).
+- Send whole Lua file or just selected portion of code.
+- Execute on local DCS instance or remote DCS server (more details below).
+- Execute in mission or GUI scripting environment.
+- Display return value in output panel or as a file (for syntax highlight)
+    - in either JSON or Lua table format.
 
 ## Requirements
 
@@ -37,30 +35,30 @@ For even better security, put the Fiddle port behind a reverse proxy with HTTPS.
 
 This extension has the following settings:
 
-- `dcsLuaRunner.serverAddress`: Remote DCS server address. It can be an IP address or a domain.
+- `serverAddress`: Remote DCS server address. It can be an IP address or a domain.
 
-- `dcsLuaRunner.serverPort`: Port of the remote DCS Fiddle. Default is `12080`.
+- `serverPort`: Port of the remote DCS Fiddle. Default is `12080`.
 
-- `dcsLuaRunner.useHttps`: Specifies whether the server is behind a HTTPS reverse proxy.   
+- `useHttps`: Specifies whether the server is behind a HTTPS reverse proxy.   
 If this is set to `true`, you should also change the `dcsLuaRunner.serverPort` to `443`.   
 Default is `false`.
 
-- `dcsLuaRunner.webAuthUsername`: Specifies the username for authentication.   
+- `webAuthUsername`: Specifies the username for authentication.   
 **Requires the modified DCS Fiddle script.**
 
-- `dcsLuaRunner.webAuthPassword`: Specifies the password for authentication.   
+- `webAuthPassword`: Specifies the password for authentication.   
 **Requires the modified DCS Fiddle script.**
 
-- `dcsLuaRunner.runCodeLocally`: Whether to send code to `127.0.0.1:12080` or to the remote server set in `dcsLuaRunner.serverAddress` and `dcsLuaRunner.serverPort`.   
+- `runCodeLocally`: Whether to send code to `127.0.0.1:12080` or to the remote server set in `dcsLuaRunner.serverAddress` and `dcsLuaRunner.serverPort`.   
 This setting can be quickly changed with the buttons on the upper-right of a lua file.
 
-- `dcsLuaRunner.runInMissionEnv`: Specifies whether to execute in mission or GUI Scripting Environment.  
+- `runInMissionEnv`: Specifies whether to execute in mission or GUI Scripting Environment.  
 This setting can be quickly changed with the buttons on the upper-right of a lua file.
 
 **NEW:**
-- `dcsLuaRunner.returnDisplay`: Wether to use output panel or file (which supports syntax highlight) to display return value.
+- `returnDisplay`: Wether to use output panel or file (which supports syntax highlight) to display return value.
 
-- `dcsLuaRunner.returnDisplayFormat`: Display return value as JSON or Lua table. (Experimental feature, please report any issue.)
+- `returnDisplayFormat`: Display return value as JSON or Lua table. (Experimental feature, please report any issue.)
 
 ## Release Notes
 

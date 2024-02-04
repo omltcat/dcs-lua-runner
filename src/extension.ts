@@ -76,7 +76,6 @@ async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename
 			timeout: 3000
 		});
 
-		outputChannel.show(true);
 		if (response.data.hasOwnProperty('result')) {
 			displayOutput(response.data.result);
 		} else {

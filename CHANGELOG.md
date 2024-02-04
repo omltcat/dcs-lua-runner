@@ -56,3 +56,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - Change default return display to file to take advantage of syntax highlight.
+
+## [1.1.2] - 2024-02-03
+
+### Fixed
+- Fix output panel still opening when return display is set to file.
