@@ -32,12 +32,12 @@
         "dcsLuaRunner.serverPort": {
           "type": "number",
           "default": 12080,
-          "description": "Remote DCS Fiddle port."
+          "description": "Remote DCS Fiddle port for mission env. GUI env will automatically be on the next port (12081 by default)."
         },
         "dcsLuaRunner.useHttps": {
           "type": "boolean",
           "default": false,
-          "description": "If server is behind a HTTPS reverse proxy. You should also change the port to 443."
+          "description": "Set if server is behind a HTTPS reverse proxy. You should also change server port accordingly (443)."
         },
         "dcsLuaRunner.webAuthUsername": {
           "type": "string",
@@ -71,7 +71,7 @@
           "default": "JSON",
           "description": "Note: Experimental feature! Original returned data is in JSON. Conversion to Lua table is done after receiving data and may not be 100% accurate. Please report any issues."
         },
-        "dcsLuaRunner.showQuickButtons": {
+        "dcsLuaRunner.quickButtons": {
           "type": "boolean",
           "default": false,
           "description": "Show buttons to quickly switch settings beside the run button."

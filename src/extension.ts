@@ -11,7 +11,7 @@ async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename
 	const runCodeLocally = config.get('runCodeLocally') as boolean;
 	const runInMissionEnv = config.get('runInMissionEnv') as boolean;
 	const serverAddress = runCodeLocally ? '127.0.0.1' : config.get('serverAddress') as string;
-	const serverPort = runCodeLocally ? 12080 : config.get('serverPort') as number + (runInMissionEnv ? 0 : 1);
+	const serverPort = (runCodeLocally ? 12080 : config.get('serverPort') as number) + (runInMissionEnv ? 0 : 1);
 	const useHttps = runCodeLocally ? false : config.get('useHttps') as boolean;
 	const authUsername = config.get('webAuthUsername') as string;
 	const authPassword = config.get('webAuthPassword') as string;
@@ -27,7 +27,13 @@ async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename
 		} else if (returnDisplay === 'file') {
 			const activeEditor = vscode.window.activeTextEditor;
 			const workspaceFolder = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
-			const filePath = `${workspaceFolder}/.vscode/dcs_lua_output.${returnDisplayFormat}`;
+			const vscodeFolderPath = `${workspaceFolder}/.vscode`;
+			const filePath = `${vscodeFolderPath}/dcs_lua_output.${returnDisplayFormat}`;
+
+			// Create the .vscode directory if it doesn't exist
+			if (!fs.existsSync(vscodeFolderPath)) {
+				fs.mkdirSync(vscodeFolderPath);
+			}
 			// Create the file if it doesn't exist
 			if (!fs.existsSync(filePath)) {
 				fs.writeFileSync(filePath, '');
@@ -151,7 +157,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const runTarget = runCodeLocally ? 'local machine' : 'remote server';
 		const runEnv = runInMissionEnv ? 'mission' : 'GUI';
 		const serverAddress = runCodeLocally ? '127.0.0.1' : config.get('serverAddress') as string;
-		const serverPort = runCodeLocally ? 12080 : config.get('serverPort') as number + (runInMissionEnv ? 0 : 1);
+		const serverPort = (runCodeLocally ? 12080 : config.get('serverPort') as number) + (runInMissionEnv ? 0 : 1);
 		if (config.get('returnDisplay') === 'Console Output') {
 			outputChannel.show(true);
 			outputChannel.appendLine(`[DCS] Settings: Run code in ${runEnv} environment on ${runTarget} (${serverAddress}:${serverPort}).`);
@@ -198,7 +204,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.executeCommand('setContext', 'luaFileActive', vscode.window.activeTextEditor.document.languageId === 'lua');
 	}
     let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-	statusBarItem.tooltip = 'DCS Lua Runner: Click to change settings';
+	// statusBarItem.tooltip = 'DCS Lua Runner: Click to change settings';
 	statusBarItem.show();
 	statusBarItem.command = 'extension.showQuickPick';
 	context.subscriptions.push(statusBarItem);

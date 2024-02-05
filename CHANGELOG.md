@@ -66,3 +66,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 - Fix JSON to Lua table regex.
+
+## [1.1.4] - 2024-02-04
+
+### Changed
+- Config 'showQuickButtons' is now 'quickButtons' to avoid splitting other entries.
+- Disable status bar button tooltip to prevent obscuring notifications.
+
+### Fixed
+- File display not showing if directory does not exist.
