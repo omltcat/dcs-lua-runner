@@ -75,3 +75,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 - File display not showing if directory does not exist.
+
+## [1.1.5] - 2024-02-05
+
+### Fixed
+- Fix JSON to Lua table regex with numeric keys.
