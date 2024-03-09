@@ -1,8 +1,10 @@
 # DCS Lua Runner
 
-A VS Code extension to run lua code in DCS World (on local or remote server, in mission or GUI environment). A reimplementation of the  [DCS Fiddle](https://github.com/JonathanTurnock/dcsfiddle) web lua console.
+A VS Code extension to run lua code in DCS World (on local or remote server, in mission or GUI environment). A reimplementation of the  [DCS Fiddle](https://github.com/JonathanTurnock/dcsfiddle) web lua console. Allows for quick development and debugging of running scripted missions directly from the comfort of VS Code.
 
-Allows for quick development and debugging of running scripted missions directly from the comfort of VS Code.  
+**IMPORTANT (new):**  
+v1.1.6 reverts to providing an earlier version of dcs-fiddle-server.lua that comes with a custom JSON Serialization Module. The JSON-to-Lua conversion in this extension lavages this module to properly reconstruct the in-game Lua table.  
+*YOU MUST UPDATE THE [dcs-fiddle-server.lua](https://github.com/omltcat/dcs-lua-runner/blob/master/src/hooks/dcs-fiddle-server.lua) FILE IN YOUR INSTALLATION TO TAKE ADVANTAGE OF THIS FEATURE.*
 
 ![Demo1](docs/img/demo1-new.png)
 

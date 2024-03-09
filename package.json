@@ -68,7 +68,7 @@
         "dcsLuaRunner.returnDisplayFormat": {
           "type": "string",
           "enum": ["Lua Table", "JSON"],
-          "default": "JSON",
+          "default": "Lua Table",
           "description": "Note: Experimental feature! Original returned data is in JSON. Conversion to Lua table is done after receiving data and may not be 100% accurate. Please report any issues."
         },
         "dcsLuaRunner.quickButtons": {

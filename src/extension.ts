@@ -60,7 +60,7 @@ async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename
 		let luaString = jsonString;	
 		// Replace JSON syntax with Lua syntax		
 		luaString = luaString.replace(/null/g, 'nil'); // Replace null with nil
-		luaString = luaString.replace(/"([^"]+)":/g, '["$1"] ='); // Replace "key": with ["key"] =
+		luaString = luaString.replace(/"((?:[^"\\]|\\.)+)":/g, '["$1"] ='); // Replace "key": with ["key"] =
 		luaString = luaString.replace(/\["_([0-9]+)"\]\s*=/g, '[$1] ='); // Replace ["_n"] = with [n] =
 		luaString = luaString.replace(/\[\]/g, '{}'); // Replace [] with {}
 		luaString = luaString.replace(/\[\n/g, '{\n'); // Replace [ followed by a line break with { followed by a line break

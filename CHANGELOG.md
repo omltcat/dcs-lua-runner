@@ -80,3 +80,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 - Fix JSON to Lua table regex with numerical keys.
+
+## [1.1.6] - 2024-03-09
+
+### Changed
+- Revert to providing an earlier version of dcs-fiddle-server.lua script that comes with a custom JSON Serialization Module that is capable of handling non-standard tables used in DCS. The JSON-to-Lua conversion in this extension lavages this custom module to properly reconstruct the in-game Lua table.  
+*YOU MUST UPDATE THE [dcs-fiddle-server.lua](https://github.com/omltcat/dcs-lua-runner/blob/master/src/hooks/dcs-fiddle-server.lua) FILE IN YOUR INSTALLATION TO TAKE ADVANTAGE OF THIS FEATURE.*
+- Display format now defaults to Lua table after it has been thoroughly tested.
+
+### Fixed
+- Fix JSON to Lua table regex with escaped quotes.
