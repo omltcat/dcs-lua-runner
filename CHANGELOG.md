@@ -90,3 +90,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 - Fix JSON to Lua table regex with escaped quotes.
+
+## [1.1.7] - 2024-05-10
+
+### Added
+- Integrate a detailed setup guide into extension.
+- Automatically show setup guide on first activation.

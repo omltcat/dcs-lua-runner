@@ -5,10 +5,10 @@ FIDDLE = {}
 
 -- Configs:
 FIDDLE.PORT = 12080         -- keep this at 12080 if you also want to use the DCS Fiddle website.
+-- FIDDLE.BIND_IP = '0.0.0.0'  -- for remote access
 FIDDLE.AUTH = true          -- set to true to enable basic auth, recommended for public servers.
 FIDDLE.USERNAME = 'username'
 FIDDLE.PASSWORD = 'password'
-FIDDLE.BIND_IP = '0.0.0.0'  -- for remote access
 FIDDLE.BYPASS_LOCAL = true  -- allow requests to 127.0.0.1:12080 without auth, so DCS Fiddle website can still work. (Not a very secure implementation. Use at your own risk if your 12080 port is public)
 --[[
 Custom JSON Serialization Module that handles DCS' usage of integers as table keys such as {[1]=1, ["name"]="Enfield11", [2]=1, [3]=1} which is not valid json

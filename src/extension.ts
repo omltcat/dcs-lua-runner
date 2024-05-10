@@ -116,6 +116,14 @@ function getCurrentFileLua() {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+	// context.globalState.update('firstRunDone', false);
+    const isFirstRun = !context.globalState.get('firstRunDone');
+	if (isFirstRun) {
+        context.globalState.update('firstRunDone', true);
+        const installMdPath = vscode.Uri.file(context.asAbsolutePath('INSTALL.md'));
+        vscode.commands.executeCommand('markdown.showPreview', installMdPath);
+    }
+
 	const config = vscode.workspace.getConfiguration('dcsLuaRunner');
     let outputChannel = vscode.window.createOutputChannel("DCS Lua Runner");
 
@@ -191,6 +199,10 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand('dcs-lua-runner.set-missionEnv-button', () => updateSetting('runInMissionEnv', true)));
 	context.subscriptions.push(vscode.commands.registerCommand('dcs-lua-runner.set-guiEnv', () => updateSetting('runInMissionEnv', false)));
 	context.subscriptions.push(vscode.commands.registerCommand('dcs-lua-runner.set-guiEnv-button', () => updateSetting('runInMissionEnv', false)));
+	context.subscriptions.push(vscode.commands.registerCommand('dcs-lua-runner.show-setup-guide', () => {
+        const installMdPath = vscode.Uri.file(context.asAbsolutePath('INSTALL.md'));
+        vscode.commands.executeCommand('markdown.showPreview', installMdPath);
+    }));
 
 	// Update the 'luaFileActive' context when the active editor changes
 	vscode.window.onDidChangeActiveTextEditor(editor => {
@@ -230,7 +242,8 @@ export function activate(context: vscode.ExtensionContext) {
 			{ label: 'DCS Lua: Set Run Code on Remote Server', command: 'dcs-lua-runner.set-remote' },
 			{ label: 'DCS Lua: Set Run Code in Mission Environment', command: 'dcs-lua-runner.set-missionEnv' },
 			{ label: 'DCS Lua: Set Run Code in GUI Environment', command: 'dcs-lua-runner.set-guiEnv' },
-			{ label: 'DCS Lua: Open Settings', command: 'dcs-lua-runner.open-settings' }
+			{ label: 'DCS Lua: Open Settings', command: 'dcs-lua-runner.open-settings' },
+			{ label: 'DCS Lua: Show Setup Guide', command: 'dcs-lua-runner.show-setup-guide'}
 		];
 		vscode.window.showQuickPick(items).then(selection => {
 			// the user picked an item from the list

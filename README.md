@@ -2,9 +2,8 @@
 
 A VS Code extension to run lua code in DCS World (on local or remote server, in mission or GUI environment). A reimplementation of the  [DCS Fiddle](https://github.com/JonathanTurnock/dcsfiddle) web lua console. Allows for quick development and debugging of running scripted missions directly from the comfort of VS Code.
 
-**IMPORTANT (new):**  
-v1.1.6 reverts to providing an earlier version of dcs-fiddle-server.lua that comes with a custom JSON Serialization Module. The JSON-to-Lua conversion in this extension lavages this module to properly reconstruct the in-game Lua table.  
-*YOU MUST UPDATE THE [dcs-fiddle-server.lua](https://github.com/omltcat/dcs-lua-runner/blob/master/src/hooks/dcs-fiddle-server.lua) FILE IN YOUR INSTALLATION TO TAKE ADVANTAGE OF THIS FEATURE.*
+- If you find this extension useful, please star it on [**GitHub**](https://github.com/omltcat/dcs-lua-runner)
+- Don't hesitate to report any problems, provide segguestions or request features using [**Issues**](https://github.com/omltcat/dcs-lua-runner/issues).
 
 ![Demo1](docs/img/demo1-new.png)
 
@@ -18,20 +17,8 @@ v1.1.6 reverts to providing an earlier version of dcs-fiddle-server.lua that com
 - Display return value in output panel or as a file (for syntax highlight)
     - in either JSON or Lua table format.
 
-## Requirements
-
-### DCS Hooks Installation
-Install DCS Fiddle script the same way as the original web version, and de-sanitize mission scripting.   
-[**Original instruction here**](https://dcsfiddle.pages.dev/docs)
-
-All credits of this scripts and its API implementations go to the original authors [JonathanTurnock](https://github.com/JonathanTurnock) and [john681611](https://github.com/john681611).
-
-### Important
-If you want to run code on a remote DCS server, you need to expose its Fiddle port (12080 by default). This however, creates a security risk, as everyone can now inject lua code into your server. 
-
-It is recommended to install this [modified Fiddle script](src/hooks/dcs-fiddle-server.lua). It allows you configure a basic authentication at the beginning of the file. 
-
-For even better security, put the Fiddle port behind a reverse proxy with HTTPS. 
+## Installation
+See [**INSTALL.md**](INSTALL.md).
 
 ## Extension Settings
 
@@ -68,7 +55,7 @@ See [**changelog**](CHANGELOG.md).
 
 
 ## Credits
-[**DCS Fiddle**](https://github.com/JonathanTurnock/dcsfiddle) by [JonathanTurnock](https://github.com/JonathanTurnock) and [john681611](https://github.com/john681611).
+All credits of this scripts and its API implementations go to the original authors [JonathanTurnock](https://github.com/JonathanTurnock) and [john681611](https://github.com/john681611).
 
 ## License
 
