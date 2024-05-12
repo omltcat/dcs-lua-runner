@@ -4,7 +4,7 @@
   "description": "Quickly run lua code in DCS World (local or remote server). A reimplementation of the DCS Fiddle lua console in VS Code.",
   "license": "MIT",
   "publisher": "omltcat",
-  "version": "1.1.7",
+  "version": "1.2",
   "icon": "docs/img/icon.png",
   "repository": {
     "type": "git",
@@ -27,17 +27,26 @@
         "dcsLuaRunner.serverAddress": {
           "type": "string",
           "default": "",
-          "description": "Remote DCS server address (IP or domain)."
+          "description": "Remote DCS server address (IP or domain). See setup guide if you are using a HTTPS reverse proxy."
+        },
+        "dcsLuaRunner.serverAddressGUI": {
+          "type": "string",
+          "description": "Override remote GUI env address. For example, you can put both endpoints behind a HTTPS reverse proxy with different subdomains. Their ports should both be 443."
         },
         "dcsLuaRunner.serverPort": {
           "type": "number",
           "default": 12080,
           "description": "Remote DCS Fiddle port for mission env. GUI env will automatically be on the next port (12081 by default)."
         },
+        "dcsLuaRunner.serverPortGUI": {
+          "type": "number",
+          "default": 12081,
+          "description": "Overide remote GUI env port. For example, you can put both endpoints behind a HTTPS reverse proxy with different subdomains. Their ports should both be 443."
+        },
         "dcsLuaRunner.useHttps": {
           "type": "boolean",
           "default": false,
-          "description": "Set if server is behind a HTTPS reverse proxy. You should also change server port accordingly (443)."
+          "description": "Set if the remote server is behind a HTTPS reverse proxy. You should also change both ports accordingly (443)."
         },
         "dcsLuaRunner.webAuthUsername": {
           "type": "string",

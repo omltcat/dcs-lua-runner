@@ -10,8 +10,12 @@ async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename
 	const returnDisplayFormat = config.get('returnDisplayFormat') === 'JSON' ? 'json' : 'lua' as string;
 	const runCodeLocally = config.get('runCodeLocally') as boolean;
 	const runInMissionEnv = config.get('runInMissionEnv') as boolean;
-	const serverAddress = runCodeLocally ? '127.0.0.1' : config.get('serverAddress') as string;
-	const serverPort = (runCodeLocally ? 12080 : config.get('serverPort') as number) + (runInMissionEnv ? 0 : 1);
+	const serverAddressMission = runCodeLocally ? '127.0.0.1' : config.get('serverAddress') as string;
+	const serverAddressGUI = (runCodeLocally || !config.get('serverAddressGUI')) ? serverAddressMission : config.get('serverAddressGUI') as string;
+	const serverAddress = runInMissionEnv ? serverAddressMission : serverAddressGUI;
+	const serverPortMission = runCodeLocally ? 12080 : config.get('serverPort') as number
+	const serverPortGUI = (runCodeLocally || !config.get('serverPortGUI')) ? (serverPortMission + 1) : config.get('serverPortGUI') as number;
+	const serverPort = runInMissionEnv ? serverPortMission : serverPortGUI;
 	const useHttps = runCodeLocally ? false : config.get('useHttps') as boolean;
 	const authUsername = config.get('webAuthUsername') as string;
 	const authPassword = config.get('webAuthPassword') as string;
@@ -162,21 +166,26 @@ export function activate(context: vscode.ExtensionContext) {
 		const config = vscode.workspace.getConfiguration('dcsLuaRunner');
 		const runCodeLocally = config.get('runCodeLocally') as boolean;
 		const runInMissionEnv = config.get('runInMissionEnv') as boolean;
-		const runTarget = runCodeLocally ? 'local machine' : 'remote server';
 		const runEnv = runInMissionEnv ? 'mission' : 'GUI';
-		const serverAddress = runCodeLocally ? '127.0.0.1' : config.get('serverAddress') as string;
-		const serverPort = (runCodeLocally ? 12080 : config.get('serverPort') as number) + (runInMissionEnv ? 0 : 1);
+		const serverAddressMission = runCodeLocally ? '127.0.0.1' : config.get('serverAddress') as string;
+		const serverAddressGUI = (runCodeLocally || !config.get('serverAddressGUI')) ? serverAddressMission : config.get('serverAddressGUI') as string;
+		const serverAddress = runInMissionEnv ? serverAddressMission : serverAddressGUI;
+		const serverPortMission = runCodeLocally ? 12080 : config.get('serverPort') as number
+		const serverPortGUI = (runCodeLocally || !config.get('serverPortGUI')) ? (serverPortMission + 1) : config.get('serverPortGUI') as number;
+		const serverPort = runInMissionEnv ? serverPortMission : serverPortGUI;
+		const useHttps = runCodeLocally ? false : config.get('useHttps') as boolean;
+		const protocol = useHttps ? 'https' : 'http';
 		if (config.get('returnDisplay') === 'Console Output') {
 			outputChannel.show(true);
-			outputChannel.appendLine(`[DCS] Settings: Run code in ${runEnv} environment on ${runTarget} (${serverAddress}:${serverPort}).`);
+			outputChannel.appendLine(`[DCS] Settings: Run code in ${runEnv} environment on ${protocol}://${serverAddress}:${serverPort}.`);
 		} else {
-			vscode.window.showInformationMessage(`Run code in ${runEnv} environment on ${serverAddress}:${serverPort}`);
+			vscode.window.showInformationMessage(`Run code in ${runEnv} environment on ${protocol}://${serverAddress}:${serverPort}`);
 		}
 	};
 
 	const updateSetting = async (setting: string, targetState: boolean) => {
 		const config = vscode.workspace.getConfiguration('dcsLuaRunner');
-		if (setting === 'runCodeLocally' && targetState === false && config.get('serverAddress') === '') {
+		if (setting === 'runCodeLocally' && targetState === false && !config.get('serverAddress')) {
 			vscode.window.showErrorMessage('Remote DCS server address not set.', 'Open Settings').then((choice) => {
 				if (choice === 'Open Settings') {
 					vscode.commands.executeCommand('workbench.action.openSettings', 'dcsLuaRunner');

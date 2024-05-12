@@ -11,7 +11,7 @@ It is still compatible with the [DCS Fiddle website](https://dcsfiddle.pages.dev
 - Don't hesitate to report any problems, provide segguestions or request features using [**Issues**](https://github.com/omltcat/dcs-lua-runner/issues).
 
 ## Hook Script
-1. Download [**dcs-fiddle-server.lua**](https://github.com/omltcat/dcs-lua-runner/blob/master/src/hooks/dcs-fiddle-server.lua).
+1. Download [**dcs-fiddle-server.lua**](https://github.com/omltcat/dcs-snippets/blob/master/Scripts/Hooks/dcs-fiddle-server.lua).
 2. Save to `%USERPROFILE%\Saved Games\<DCS VERSION>\Scripts\Hooks`.
     - Generally this means `C:\Users\<USERNAME>\Saved Games`
     - `<DCS VERSION>` could be `DCS`, `DCS.openbeta`, `DCS.release_server`, etc.
@@ -43,23 +43,45 @@ end
 ### Script Configuration
 If you want to run code on a remote DCS server, you need to expose the FIDDLE PORT to 0.0.0.0 by modifying the beginning of the `dcs-fiddle-server.lua` file. 
 
-It is highly recommended that you also set up the basic authentication, otherwise anyone can inject lua code into your server. For best security, also put the FIDDLE PORT behind a reverse proxy with HTTPS.
+
+It is highly recommended that you also set up the basic authentication, otherwise anyone can inject lua code into your server. For best security, also put the FIDDLE PORT behind a reverse proxy with HTTPS (see [below](#reverse-proxy)).
 
 ```lua
--- Configs:
 FIDDLE.PORT = 12080         -- keep this at 12080 if you also want to use the DCS Fiddle website.
-FIDDLE.BIND_IP = '0.0.0.0'  -- for remote access
+FIDDLE.BIND_IP = '0.0.0.0'  -- Use '0.0.0.0' for remote access, default is '127.0.0.1'
 FIDDLE.AUTH = true          -- set to true to enable basic auth, recommended for public servers.
-FIDDLE.USERNAME = 'username'
-FIDDLE.PASSWORD = 'password'
+FIDDLE.USERNAME = 'username'    -- set your username
+FIDDLE.PASSWORD = 'password'    -- set your password
 FIDDLE.BYPASS_LOCAL = true  -- allow requests to 127.0.0.1:12080 without auth.
---- So DCS Fiddle website can still work. 
---- (Not a very secure implementation. Use at your own risk if your 12080 port is public)
+-- This local bypass allows DCS Fiddle website to still work. 
+-- It uses host header to determine if the request is local.
+-- This is not the most secure method and can be spoofed, so use at your own risk.
+-- Use a reverse proxy for best security.
+```
+#### VS Code Settings
+Open command pallette (`Ctrl`+`Shift`+`P`) and type `DCS Lua: Open Runner Settings`.  
+You need to set:
+- Server Address: IP of the DCS server
+- Web Auth Username: same as `FIDDLE.USERNAME`
+- Web Auth Password: same as `FIDDLE.PASSWORD`
+
+### Reverse Proxy
+The `dcs-fiddle-server.lua` script separates mission/GUI environment based on ports. By default the GUI env is automatically on the next port of mission env (12080-12081). When using a HTTPS reverse proxy, you can map the two ports to different subdomains, e.g.:
+
+```
+https://fiddle.example.com/     ->  http://dcs-server-ip:12080/
+https://fiddle-gui.example.com/ ->  http://dcs-server-ip:12081/
 ```
 
-### VS Code Settings
-1. In VS Code, open command pallette (`Ctrl`+`Shift`+`P`) and type `DCS Lua: Open Runner Settings`.
-2. Set server address, port, username, and password accordingly.
+In VS Code - DCS Lua Runner Settings, set the following accordingly:
+- Server Address: `fiddle.example.com`
+- Server Address GUI: `fiddle-gui.example.com`
+- Server Port: `443`
+- Server Port GUI: `443`
+- Use Https: `true`
+- Web Auth Username: same as `FIDDLE.USERNAME`
+- Web Auth Password: same as `FIDDLE.PASSWORD`
 
 ## Credits
-All credits of this scripts and its API implementations go to the original authors [JonathanTurnock](https://github.com/JonathanTurnock) and [john681611](https://github.com/john681611).
+All credits of this scripts and its API implementations go to the original authors [JonathanTurnock](https://github.com/JonathanTurnock) and [john681611](https://github.com/john681611).  
+Under MIT License, see [dcsfiddle](https://github.com/JonathanTurnock/dcsfiddle?tab=MIT-1-ov-file).

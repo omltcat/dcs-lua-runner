@@ -18,15 +18,19 @@ A VS Code extension to run lua code in DCS World (on local or remote server, in 
     - in either JSON or Lua table format.
 
 ## Installation
-See [**INSTALL.md**](INSTALL.md).
-
+See [**INSTALL.md**](INSTALL.md).  
+**YOU MUST SETUP THE DCS SCRIPT FOR THIS EXTENSION TO WORK.**
 ## Extension Settings
 
 This extension has the following settings:
 
 - `serverAddress`: Remote DCS server address. It can be an IP address or a domain.
 
+- `serverAddressGUI`: Override remote DCS server address for GUI environment.
+
 - `serverPort`: Port of the remote DCS Fiddle. Default is `12080`.
+
+- `serverPortGUI`: Override port of the remote DCS Fiddle for GUI environment.
 
 - `useHttps`: Specifies whether the server is behind a HTTPS reverse proxy.   
 If this is set to `true`, you should also change the `dcsLuaRunner.serverPort` to `443`.   
@@ -44,7 +48,6 @@ This setting can be quickly changed with the buttons on the upper-right of a lua
 - `runInMissionEnv`: Specifies whether to execute in mission or GUI Scripting Environment.  
 This setting can be quickly changed with the buttons on the upper-right of a lua file.
 
-**NEW:**
 - `returnDisplay`: Wether to use output panel or file (which supports syntax highlight) to display return value.
 
 - `returnDisplayFormat`: Display return value as JSON or Lua table. (Experimental feature, please report any issue.)
@@ -55,7 +58,8 @@ See [**changelog**](CHANGELOG.md).
 
 
 ## Credits
-All credits of this scripts and its API implementations go to the original authors [JonathanTurnock](https://github.com/JonathanTurnock) and [john681611](https://github.com/john681611).
+All credits of this scripts and its API implementations go to the original authors [JonathanTurnock](https://github.com/JonathanTurnock) and [john681611](https://github.com/john681611).  
+Under MIT License, see [dcsfiddle](https://github.com/JonathanTurnock/dcsfiddle?tab=MIT-1-ov-file).
 
 ## License
 

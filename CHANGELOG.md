@@ -2,8 +2,6 @@
 
 All notable changes to the "dcs-lua-runner" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
 ## [Unreleased]
 
 ### Added
@@ -96,3 +94,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 - Integrate a detailed setup guide into extension.
 - Automatically show setup guide on first activation.
+
+## [1.2.0] - 2024-05-11
+
+### Added
+- Option to configure remote GUI environment address and port separately from mission environment for better HTTPS reverse proxy support. (PLEASE USE A REVERSE PROXY ON REMOTE SERVER FOR SECURITY!)
+
+### Changed
+- Integrated Setup guide now includes instructions to help setting up a reverse proxy.
+- Message displayed upon switching settings now includes protocol info (http/https).
+- Move dcs-fiddle-server.lua script to an [external repository](https://github.com/omltcat/dcs-snippets/blob/master/Scripts/Hooks/dcs-fiddle-server.lua).
