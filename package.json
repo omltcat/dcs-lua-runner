@@ -4,13 +4,13 @@
   "description": "Quickly run lua code in DCS World (local or remote server). A reimplementation of the DCS Fiddle lua console in VS Code.",
   "license": "MIT",
   "publisher": "omltcat",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "icon": "docs/img/icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/omltcat/dcs-lua-runner"},
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.70.0"
   },
   "categories": [
     "Programming Languages",

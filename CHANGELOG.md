@@ -104,3 +104,8 @@ All notable changes to the "dcs-lua-runner" extension will be documented in this
 - Integrated Setup guide now includes instructions to help setting up a reverse proxy.
 - Message displayed upon switching settings now includes protocol info (http/https).
 - Move dcs-fiddle-server.lua script to an [external repository](https://github.com/omltcat/dcs-snippets/blob/master/Scripts/Hooks/dcs-fiddle-server.lua).
+
+## [1.2.1] - 2024-05-30
+
+### Changed
+- Lower the minimum required version of VS Code to 1.70.0.
