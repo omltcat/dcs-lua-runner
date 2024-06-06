@@ -109,3 +109,11 @@ All notable changes to the "dcs-lua-runner" extension will be documented in this
 
 ### Changed
 - Lower the minimum required version of VS Code to 1.70.0.
+
+## [1.2.2] - 2024-06-06
+
+### Added
+- Handling of string number keys
+
+### Fixed
+- Handling of decimal number keys
