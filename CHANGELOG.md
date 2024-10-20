@@ -117,3 +117,8 @@ All notable changes to the "dcs-lua-runner" extension will be documented in this
 
 ### Fixed
 - Handling of decimal number keys
+
+## [1.2.3] - 2024-10-19
+
+### Fixed
+- Handling of Lua table keys with more than one dot

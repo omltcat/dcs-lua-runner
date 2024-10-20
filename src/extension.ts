@@ -65,8 +65,8 @@ async function runLua(lua: string, outputChannel: vscode.OutputChannel, filename
 		// Replace JSON syntax with Lua syntax		
 		luaString = luaString.replace(/null/g, 'nil'); // Replace null with nil
 		luaString = luaString.replace(/"((?:[^"\\]|\\.)+)":/g, '["$1"] ='); // Replace "key": with ["key"] =
-		luaString = luaString.replace(/\["_([0-9.]+)"\]\s*=/g, '[$1] ='); // Replace ["_n"] or ["_n.m"] = with [n] or [n.m] =
-		luaString = luaString.replace(/\["([0-9.]+)"\]\s*=/g, '[$1] ='); // Replace ["n"] or ["n.m"] = with [n] or [n.m] =
+		luaString = luaString.replace(/\["_([0-9]+(?:\.[0-9]+)?)"\]\s*=/g, '[$1] ='); // Replace ["_n"] or ["_n.m"] = with [n] or [n.m] =
+		luaString = luaString.replace(/\["([0-9]+(?:\.[0-9]+)?)"\]\s*=/g, '[$1] ='); // Replace ["n"] or ["n.m"] = with [n] or [n.m] =
 		luaString = luaString.replace(/\[\]/g, '{}'); // Replace [] with {}
 		luaString = luaString.replace(/\[\n/g, '{\n'); // Replace [ followed by a line break with { followed by a line break
 		luaString = luaString.replace(/]\n/g, '}\n'); // Replace ] followed by a line break with } followed by a line break
